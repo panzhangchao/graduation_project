@@ -1,0 +1,33 @@
+<launch>
+<!--Arguments-->
+	<arg name="map_file" default="$(find eband_tutorials)/maps/map.yaml"/>
+
+
+<param name="/use_sim_time" value="true"/>
+
+
+
+<!--move_base-->
+<node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+	<param name="base_local_planner" value="eband_local_planner/EBandPlannerROS" />
+	<rosparam file="$(find eband_tutorials)/params/costmap_common_params.yaml" command="load" ns="global_costmap" />
+  	<rosparam file="$(find eband_tutorials)/params/costmap_common_params.yaml" command="load" ns="local_costmap" />
+  	<rosparam file="$(find eband_tutorials)/params/local_costmap_params.yaml" command="load" />
+  	<rosparam file="$(find eband_tutorials)/params/global_costmap_params.yaml" command="load" />
+  	<rosparam file="$(find eband_tutorials)/params/eband_local_planner_params.yaml" command="load" />
+
+		<param name="base_global_planner" value="global_planner/GlobalPlanner" /> 		
+		<param name="planner_frequency" value="1.0" />
+		<param name="planner_patience" value="5.0" />
+	</node>
+
+
+<!-- Map server -->
+ 	<node pkg="map_server" name="map_server" type="map_server" args="$(arg map_file)"/>
+	<param name="frame_id" value="map"/>
+
+<node name="fake_localization" pkg="fake_localization" type="fake_localization" respawn="false" />
+
+<!--Rviz -->
+<node name="rviz" pkg="rviz" type="rviz" args="-d $(find eband_tutorials)/params/rviz_navigation.rviz"/>
+</launch>

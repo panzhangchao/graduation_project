@@ -1,0 +1,4 @@
+<launch>
+	<node pkg="scantopoint" type="scantopoint" name="sub_scan_to_pc2" output="screen"/>
+	<node pkg="cluster"  type="cluster_node"  name="cluster_node"  output="screen"/>
+</launch>
